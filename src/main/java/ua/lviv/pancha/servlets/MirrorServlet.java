@@ -9,11 +9,9 @@ import java.io.IOException;
 /**
  * Created by Vasyl on 11.04.2017.
  */
-public class MirrorServlet extends HttpServlet
-{
+public class MirrorServlet extends HttpServlet {
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("key") != null)
             resp.getWriter().println(req.getParameter("key").toString());
         else

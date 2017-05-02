@@ -3,38 +3,32 @@ package ua.lviv.pancha.accounts;
 /**
  * Created by Vasyl on 18.04.2017.
  */
-public class UserProfile
-{
+public class UserProfile {
     private final String login;
     private final String password;
     private final String email;
 
-    public UserProfile(String login, String password, String email)
-    {
+    public UserProfile(String login, String password, String email) {
         this.login = login;
         this.password = password;
         this.email = email;
     }
 
-    public UserProfile(String login)
-    {
+    public UserProfile(String login) {
         this.login = login;
         this.password = login;
         this.email = login;
     }
 
-    public String getLogin()
-    {
+    public String getLogin() {
         return login;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 }
