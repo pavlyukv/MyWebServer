@@ -22,6 +22,8 @@ public class SignUpServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
     @Override
@@ -29,15 +31,14 @@ public class SignUpServlet extends HttpServlet {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
 
-        if (login == null || password == null || login.isEmpty() || password.isEmpty()) {
+        if (login == null || password == null || login.isEmpty() || password.isEmpty()
+                || accountService.getUserByLogin(login) != null || accountService.addNewUser(login, password) != 1) {
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        UserProfile profile = new UserProfile(login, password);
-        accountService.addNewUser(profile);
-        profile = accountService.getUserByLogin(profile.getLogin());
+        UserProfile profile = accountService.getUserByLogin(login);
         accountService.addSession(request.getSession().getId(), profile);
 //        System.out.println(new Gson().toJson(profile)); // hack code
         response.setContentType("text/html;charset=utf-8");

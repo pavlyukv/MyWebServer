@@ -9,22 +9,26 @@ import java.util.Map;
 /**
  * Created by Vasyl on 18.04.2017.
  */
-public class AccountService {
-    private Map<String, UserProfile> sessionIdToProfile;
+public class AccountService implements AutoCloseable {
     private final DBService dbService;
+    private final UserDAO userDAO;
+    private Map<String, UserProfile> sessionIdToProfile;
 
-    public AccountService(DBService dbService) {
-        this.dbService = dbService;
+    public AccountService() {
+        dbService = new DBService();
+        userDAO = new UserDAO(dbService.getConnection());
         sessionIdToProfile = new HashMap<>();
     }
 
-    public void addNewUser(UserProfile userProfile) {
-        UserDAO userDAO = new UserDAO(dbService.getConnection());
-        userDAO.addNewUser(userProfile);
+    public int addNewUser(String login, String password) {
+        return addNewUser(new UserProfile(login, password));
+    }
+
+    public int addNewUser(UserProfile userProfile) {
+        return userDAO.addNewUser(userProfile);
     }
 
     public UserProfile getUserByLogin(String login) {
-        UserDAO userDAO = new UserDAO(dbService.getConnection());
         return userDAO.getUserByLogin(login);
     }
 
@@ -38,5 +42,10 @@ public class AccountService {
 
     public void deleteSession(String sessionId) {
         sessionIdToProfile.remove(sessionId);
+    }
+
+    @Override
+    public void close() {
+        dbService.close();
     }
 }

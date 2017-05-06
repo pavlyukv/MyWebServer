@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * Created by Vasyl on 06.05.2017.
  */
 public class DBService implements AutoCloseable {
-    // TODO - Use properties!!!
+    // TODO - properties
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost:3306/mydb";
     private static final String USER = "root";
@@ -24,10 +24,19 @@ public class DBService implements AutoCloseable {
         try {
             Class.forName(DRIVER).newInstance();
             return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            System.out.println("No connection to DB!");
+        } catch (Exception empty) {
         }
         return null;
+    }
+
+    public void printConnectInfo() {
+        try {
+            System.out.println("DB name: " + connection.getMetaData().getDatabaseProductName());
+            System.out.println("DB version: " + connection.getMetaData().getDatabaseProductVersion());
+            System.out.println("Driver: " + connection.getMetaData().getDriverName());
+            System.out.println("Autocommit: " + connection.getAutoCommit());
+        } catch (SQLException empty) {
+        }
     }
 
     public Connection getConnection() {
@@ -40,6 +49,7 @@ public class DBService implements AutoCloseable {
             if (connection != null) {
                 connection.close();
             }
-        } catch (SQLException e) {}
+        } catch (SQLException empty) {
+        }
     }
 }

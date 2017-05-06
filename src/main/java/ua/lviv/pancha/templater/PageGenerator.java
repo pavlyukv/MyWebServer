@@ -21,8 +21,7 @@ public class PageGenerator {
         cfg = new Configuration(Configuration.getVersion());
         try {
             cfg.setDirectoryForTemplateLoading(new File(HTML_DIR));
-        } catch (IOException e) {
-            System.out.println("Templates dir not found!");
+        } catch (IOException empty) {
         }
     }
 
@@ -38,8 +37,7 @@ public class PageGenerator {
         try {
             Template template = cfg.getTemplate(filename);
             template.process(data, stream);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception empty) {
         }
         return stream.toString();
     }

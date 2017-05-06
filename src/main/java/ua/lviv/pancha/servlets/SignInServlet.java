@@ -21,6 +21,7 @@ public class SignInServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO - check password
         String login = request.getParameter("login");
 
         if (login == null || login.isEmpty()) {
@@ -29,17 +30,9 @@ public class SignInServlet extends HttpServlet {
             return;
         }
 
-        // TODO - check password
         UserProfile profile = accountService.getUserByLogin(login);
-        if (profile == null) {
-            response.getWriter().println("Unauthorized");
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        } else {
-            response.getWriter().println("Authorized: " + profile.getLogin());
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-        }
+        accountService.addSession(request.getSession().getId(), profile);
+        checkAuthorization(response, profile);
     }
 
     @Override
@@ -47,6 +40,10 @@ public class SignInServlet extends HttpServlet {
         String sessionId = request.getSession().getId();
 
         UserProfile profile = accountService.getUserBySessionId(sessionId);
+        checkAuthorization(response, profile);
+    }
+
+    private void checkAuthorization(HttpServletResponse response, UserProfile profile) throws IOException {
         if (profile == null) {
             response.getWriter().println("Unauthorized");
             response.setContentType("text/html;charset=utf-8");
