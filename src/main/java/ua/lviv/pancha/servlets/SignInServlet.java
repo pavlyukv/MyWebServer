@@ -29,6 +29,7 @@ public class SignInServlet extends HttpServlet {
             return;
         }
 
+        // TODO - check password
         UserProfile profile = accountService.getUserByLogin(login);
         if (profile == null) {
             response.getWriter().println("Unauthorized");

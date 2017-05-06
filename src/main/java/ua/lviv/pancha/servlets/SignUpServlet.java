@@ -1,5 +1,6 @@
 package ua.lviv.pancha.servlets;
 
+import com.google.gson.Gson;
 import ua.lviv.pancha.accounts.AccountService;
 import ua.lviv.pancha.accounts.UserProfile;
 
@@ -20,6 +21,10 @@ public class SignUpServlet extends HttpServlet {
     }
 
     @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
+
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
@@ -30,9 +35,11 @@ public class SignUpServlet extends HttpServlet {
             return;
         }
 
-        UserProfile profile = new UserProfile(login, password, login);
+        UserProfile profile = new UserProfile(login, password);
         accountService.addNewUser(profile);
+        profile = accountService.getUserByLogin(profile.getLogin());
         accountService.addSession(request.getSession().getId(), profile);
+//        System.out.println(new Gson().toJson(profile)); // hack code
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
     }

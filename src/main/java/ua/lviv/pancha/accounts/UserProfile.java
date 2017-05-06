@@ -4,20 +4,28 @@ package ua.lviv.pancha.accounts;
  * Created by Vasyl on 18.04.2017.
  */
 public class UserProfile {
-    private final String login;
-    private final String password;
-    private final String email;
+    private int id;
+    private String login;
+    private String password;
 
-    public UserProfile(String login, String password, String email) {
+    public UserProfile(String login, String password) {
         this.login = login;
         this.password = password;
-        this.email = email;
     }
 
     public UserProfile(String login) {
         this.login = login;
         this.password = login;
-        this.email = login;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        if (id > 0) {
+            this.id = id;
+        }
     }
 
     public String getLogin() {
@@ -26,9 +34,5 @@ public class UserProfile {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getEmail() {
-        return email;
     }
 }
