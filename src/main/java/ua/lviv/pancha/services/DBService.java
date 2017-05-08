@@ -1,8 +1,12 @@
 package ua.lviv.pancha.services;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Created by Vasyl on 06.05.2017.
@@ -20,6 +24,7 @@ public class DBService implements AutoCloseable {
         connection = getSqlConnection();
     }
 
+    // TODO - add H2 db possibilities
     private static Connection getSqlConnection() {
         try {
             Class.forName(DRIVER).newInstance();

@@ -1,5 +1,6 @@
 package ua.lviv.pancha;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -10,19 +11,24 @@ import ua.lviv.pancha.accounts.AccountService;
 import ua.lviv.pancha.servlets.MirrorServlet;
 import ua.lviv.pancha.servlets.SignInServlet;
 import ua.lviv.pancha.servlets.SignUpServlet;
+import ua.lviv.pancha.servlets.WebSocketChatServlet;
 
 /**
  * Created by Vasyl on 11.04.2017.
  */
 public class Main {
+    public static final Logger LOG = Logger.getLogger(Main.class);
+
     public static void main(String[] args) {
         try (AccountService accountService = new AccountService()) {
             ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
             contextHandler.addServlet(new ServletHolder(new MirrorServlet()), "/mirror");
             contextHandler.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/signup");
             contextHandler.addServlet(new ServletHolder(new SignInServlet(accountService)), "/signin");
+            contextHandler.addServlet(new ServletHolder(new WebSocketChatServlet()), "/chat");
 
             ResourceHandler resourceHandler = new ResourceHandler();
+            resourceHandler.setDirectoriesListed(true);
             resourceHandler.setResourceBase("public_html");
 
             HandlerList handlers = new HandlerList();
@@ -32,9 +38,10 @@ public class Main {
             server.setHandler(handlers);
 
             server.start();
-            System.out.println("Server started");
+            LOG.info("Server started");
             server.join();
-        } catch (Exception empty) {
+        } catch (Exception e) {
+            LOG.fatal("Server crashed", e);
         }
     }
 }
